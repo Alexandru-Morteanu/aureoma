@@ -1,77 +1,69 @@
 import React, { useState } from "react";
+import { sortOptionsCresc, sortOptionsDesc } from "../../../constants";
 type Props = {
   handleSort: (index: string) => void;
-  expandSort: boolean;
-  setExpandSort: Function;
+  expandSortCresc: boolean;
+  setExpandSortCresc: Function;
+  expandSortDesc: boolean;
+  setExpandSortDesc: Function;
 };
-export default function Sort({ handleSort, expandSort, setExpandSort }: Props) {
-  function handleExpandSort() {
-    setExpandSort(!expandSort);
-  }
+export default function Sort({
+  handleSort,
+  expandSortCresc,
+  setExpandSortCresc,
+  expandSortDesc,
+  setExpandSortDesc,
+}: Props) {
   return (
-    <>
-      <button
-        className="bg-gray-400 m-3 p-2 rounded-lg shadow-md hover:bg-gray-500 transition duration-300"
-        onClick={() => handleExpandSort()}
-      >
-        Sort
-      </button>
-      <div className="flex justify-center">
-        {expandSort && (
-          <div className="z-20 flex flex-col absolute right-10 top-12 bg-black text-white rounded-lg shadow-md p-2 space-y-2">
-            <div>
+    <div className="flex">
+      <div>
+        <button
+          className="bg-gray-400 m-3 p-2 rounded-lg shadow-md hover:bg-gray-500 transition duration-300"
+          onClick={() => {
+            setExpandSortCresc(!expandSortCresc);
+            setExpandSortDesc(false);
+          }}
+        >
+          Sort ↑
+        </button>
+        {expandSortCresc && (
+          <div className="absolute flex flex-col bg-black text-white rounded-lg p-2 space-y-2 z-50">
+            {sortOptionsCresc.map((option, index) => (
               <button
+                key={index}
                 className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => {
-                  handleSort("PretCresc");
-                }}
+                onClick={() => handleSort(option.value)}
               >
-                Pret ↑
+                {option.label}
               </button>
-              <button
-                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => handleSort("PretDesc")}
-              >
-                Pret ↓
-              </button>
-            </div>
-            <div>
-              <button
-                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => handleSort("GreutateCresc")}
-              >
-                Greutate ↑
-              </button>
-              <button
-                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => handleSort("GreutateDesc")}
-              >
-                Greutate ↓
-              </button>
-            </div>
-            <div>
-              <button
-                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => handleSort("MarimeCresc")}
-              >
-                Marime ↑
-              </button>
-              <button
-                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-                onClick={() => handleSort("MarimeDesc")}
-              >
-                Marime ↓
-              </button>
-            </div>
-            <button
-              className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
-              onClick={() => handleSort("Alfabetic")}
-            >
-              Alfabetic
-            </button>
+            ))}
           </div>
         )}
       </div>
-    </>
+      <div>
+        <button
+          className="bg-gray-400 m-3 p-2 rounded-lg shadow-md hover:bg-gray-500 transition duration-300"
+          onClick={() => {
+            setExpandSortDesc(!expandSortDesc);
+            setExpandSortCresc(false);
+          }}
+        >
+          Sort ↓
+        </button>
+        {expandSortDesc && (
+          <div className="absolute flex flex-col bg-black text-white rounded-lg  p-2 space-y-2  z-50">
+            {sortOptionsDesc.map((option, index) => (
+              <button
+                key={index}
+                className="bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 transition duration-300"
+                onClick={() => handleSort(option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

@@ -21,6 +21,17 @@ export type ItemData = {
   descriere: string;
   marime: number;
   greutate: number;
-  pret: number;
   imageUrl: string;
 };
+export const sortOptionsCresc = [
+  { label: "Pret ↑", value: "PretCresc" },
+  { label: "Greutate ↑", value: "GreutateCresc" },
+  { label: "Marime ↑", value: "MarimeCresc" },
+  { label: "Alfabetic", value: "Alfabetic" },
+];
+export const sortOptionsDesc = [
+  { label: "Pret ↓", value: "PretDesc" },
+  { label: "Greutate ↓", value: "GreutateDesc" },
+  { label: "Marime ↓", value: "MarimeDesc" },
+  { label: "Alfabetic", value: "Alfabetic" },
+];

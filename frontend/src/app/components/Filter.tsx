@@ -9,51 +9,48 @@ export default function Filter({
   pretRange,
   setPretRange,
 }: Props) {
-  const [expandFilter, setExpandFilter] = useState<boolean>(false);
-
-  function handleExpandSort() {
-    setExpandFilter(!expandFilter);
-  }
   return (
-    <>
-      <button
-        className=" bg-gray-400 m-3 p-2"
-        onClick={() => handleExpandSort()}
-      >
-        filter
-      </button>
+    <div className="flex items-center flex-col m-6" style={{ width: 200 }}>
       <div className=" flex justify-center">
-        {expandFilter && (
-          <div className=" flex justify-center items-center flex-col absolute  gap-4 p-2">
-            <div className="flex gap-2">
-              <input
-                type="number"
-                value={pretRange.min === undefined ? "" : pretRange.min}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setPretRange({
-                    ...pretRange,
-                    min: value === "" ? undefined : parseFloat(value),
-                  });
-                }}
-                placeholder="Min Pret"
-              />
-              <input
-                type="number"
-                value={pretRange.max === undefined ? "" : pretRange.max}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setPretRange({
-                    ...pretRange,
-                    max: value === "" ? undefined : parseFloat(value),
-                  });
-                }}
-                placeholder="Max Pret"
-              />{" "}
-            </div>
+        <div className="flex justify-center items-center flex-col absolute ">
+          <div
+            className="flex flex-col gap-2"
+            style={{
+              width: 150,
+            }}
+          >
+            <b>Pret</b>
+            <input
+              type="number"
+              className="border border-gray-300 rounded-md p-2"
+              style={{ width: "80%" }}
+              value={pretRange.min === undefined ? "" : pretRange.min}
+              onChange={(e) => {
+                const value = e.target.value;
+                setPretRange({
+                  ...pretRange,
+                  min: value === "" ? undefined : parseFloat(value),
+                });
+              }}
+              placeholder="Min Pret"
+            />
+            <input
+              type="number"
+              style={{ width: "80%" }}
+              className="border border-gray-300 rounded-md p-2"
+              value={pretRange.max === undefined ? "" : pretRange.max}
+              onChange={(e) => {
+                const value = e.target.value;
+                setPretRange({
+                  ...pretRange,
+                  max: value === "" ? undefined : parseFloat(value),
+                });
+              }}
+              placeholder="Max Pret"
+            />{" "}
           </div>
-        )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

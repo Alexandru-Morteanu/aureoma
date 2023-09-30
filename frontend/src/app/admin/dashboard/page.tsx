@@ -15,7 +15,8 @@ function Dashboard() {
   const [showMoreButtons, setShowMoreButtons] = useState<boolean>(false);
   const [tableData, setTableData] = useState<ItemData[]>([]);
   const [expandDetails, setExpandDetails] = useState<boolean>(false);
-  const [expandSort, setExpandSort] = useState<boolean>(false);
+  const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
+  const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [originalIndices, setOriginalIndices] = useState<number[]>([]);
   const [details, setDetails] = useState<number>();
@@ -72,40 +73,53 @@ function Dashboard() {
   }
   function handleSort(sortBy: string) {
     setSort(sortBy);
-    setExpandSort(!expandSort);
+    setExpandSortCresc(false);
+    setExpandSortDesc(false);
   }
   function handleFilter(sortBy: string) {
     console.log("ok");
   }
   return (
-    <div className="w-100 flex justify-center">
+    <div className="w-100 flex justify-center mt-5">
       <div
         className="flex flex-col items-center"
         style={{
           width: "80%",
         }}
       >
-        <h2 className=" flex justify-center">Dashboard</h2>
-        <Filter
-          pretRange={pretRange}
-          setPretRange={setPretRange}
-          handleFilter={handleFilter}
-        />
-        <Sort
-          handleSort={handleSort}
-          expandSort={expandSort}
-          setExpandSort={setExpandSort}
-        />
-
-        <Table
-          sort={sort}
-          tableData={tableData}
-          handleDetails={handleDetails}
-          pretRange={pretRange}
-          filter={filter}
-          originalIndices={originalIndices}
-          setOriginalIndices={setOriginalIndices}
-        />
+        <div
+          className="flex"
+          style={{
+            width: "100%",
+          }}
+        >
+          <Filter
+            pretRange={pretRange}
+            setPretRange={setPretRange}
+            handleFilter={handleFilter}
+          />
+          <div className="w-100">
+            <div className="flex items-center justify-between mx-8">
+              <b className="text-4xl">Admin</b>
+              <Sort
+                handleSort={handleSort}
+                expandSortCresc={expandSortCresc}
+                setExpandSortCresc={setExpandSortCresc}
+                expandSortDesc={expandSortDesc}
+                setExpandSortDesc={setExpandSortDesc}
+              />
+            </div>
+            <Table
+              sort={sort}
+              tableData={tableData}
+              handleDetails={handleDetails}
+              pretRange={pretRange}
+              filter={filter}
+              originalIndices={originalIndices}
+              setOriginalIndices={setOriginalIndices}
+            />
+          </div>
+        </div>
         <button
           className="text-white bg-black"
           onClick={() => {

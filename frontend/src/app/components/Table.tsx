@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ItemData } from "../../../constants";
+import { ItemData, PRET_ARGINT, PRET_AUR } from "../../../constants";
 import { supabase } from "@/app/components/supabase";
 import Image from "next/image";
 
@@ -27,15 +27,27 @@ function Table({
   const [newImageUrls, setNewImageUrls] = useState<string[]>([]);
   const [sortedData, setSortedData] = useState<ItemData[]>(tableData);
 
+  function calcPret(category: string, greutate: number) {
+    return category === "Aur" ? greutate * PRET_AUR : greutate * PRET_ARGINT;
+  }
+
   useEffect(() => {
     if (tableData.length > 0) {
       const indices = Array.from(tableData.keys());
       switch (sort) {
         case "PretCresc":
-          indices.sort((a, b) => tableData[a].pret - tableData[b].pret);
+          indices.sort(
+            (a, b) =>
+              calcPret(tableData[a].category, tableData[a].greutate) -
+              calcPret(tableData[b].category, tableData[b].greutate)
+          );
           break;
         case "PretDesc":
-          indices.sort((a, b) => tableData[b].pret - tableData[a].pret);
+          indices.sort(
+            (a, b) =>
+              calcPret(tableData[b].category, tableData[b].greutate) -
+              calcPret(tableData[a].category, tableData[a].greutate)
+          );
           break;
         case "GreutateCresc":
           indices.sort((a, b) => tableData[a].greutate - tableData[b].greutate);
@@ -69,8 +81,9 @@ function Table({
           const item = tableData[index];
           if (
             pretRange &&
-            item.pret >= (pretRange.min !== undefined ? pretRange.min : 0) &&
-            item.pret <=
+            calcPret(item.category, item.greutate) >=
+              (pretRange.min !== undefined ? pretRange.min : 0) &&
+            calcPret(item.category, item.greutate) <=
               (pretRange.max !== undefined
                 ? pretRange.max
                 : Number.MAX_SAFE_INTEGER)
@@ -127,16 +140,15 @@ function Table({
       }}
       className=" p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-scroll w-5/6 sm:w-3/4 md:w-2/3 xl:w-1/2 mx-auto"
     >
-      {" "}
       {sortedData?.map((row, index) => {
         return (
           <button
             onClick={() => handleDetails(index)}
             key={index}
-            className=" bg-slate-200 bg-opacity-60 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+            className=" flex items-center flex-col bg-slate-200 bg-opacity-60 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
             style={{ width: "100%", height: "100%" }}
           >
-            <div className="mt-2">
+            <div className="mt-2 ">
               <div
                 className="w-full h-32 md:h-48 lg:h-56 xl:h-64 overflow-hidden"
                 style={{ height: 150 }}
@@ -151,9 +163,20 @@ function Table({
               </div>
             </div>
             <div className="mt-2 font-bold text-xl">{row.denumire}</div>
-            <div className="text-lg">{row.descriere}</div>
+            <div
+              className="text-sm text-left text-ellipsis"
+              style={{
+                width: "80%",
+                height: "60px",
+                overflow: "hidden",
+              }}
+            >
+              {row.descriere}
+            </div>
             <div className="text-lg">{row.greutate} g</div>
-            <div className="text-lg font-bold">{row.pret} MDL</div>
+            <div className="text-lg font-bold">
+              {calcPret(row.category, row.greutate).toLocaleString()} MDL
+            </div>
           </button>
         );
       })}

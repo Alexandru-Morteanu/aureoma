@@ -26,7 +26,6 @@ export default function Add({}) {
     descriere: "",
     marime: 0,
     greutate: 0,
-    pret: 0,
     imageUrl: "",
   });
 
@@ -77,11 +76,11 @@ export default function Add({}) {
 
         const data = {
           ...itemData,
-          pret: parseFloat(
-            (
-              (category === "Aur" ? PRET_AUR : PRET_ARGINT) * itemData.greutate
-            ).toFixed(2)
-          ),
+          // pret: parseFloat(
+          //   (
+          //     (category === "Aur" ? PRET_AUR : PRET_ARGINT) * itemData.greutate
+          //   ).toFixed(2)
+          // ),
           imageUrl,
         };
         const res = await supabase.from("item").upsert([data]);
