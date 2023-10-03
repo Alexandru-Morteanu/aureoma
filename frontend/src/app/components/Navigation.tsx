@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../../../public/shop_icon.svg";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-const Navigation: React.FC = () => {
-  const nrItem = useSearchParams().get("nrItems") ?? 0;
+import { useRouter } from "next/navigation";
+import { useBasket } from "./Basket";
+const Navigation = () => {
   const [isLarge, setIsLarge] = useState(true);
   const [open, setOpen] = useState(false);
-  const [nrItems, setNrItems] = useState(nrItem);
+  let { basketItemCount, language, setLanguage } = useBasket();
+  const currentURL = window.location.pathname;
+  const pathArray = currentURL.split("/");
+  const articol = pathArray[pathArray.length - 1];
+  const { push } = useRouter();
 
   useEffect(() => {
     setOpen(false);
@@ -26,10 +30,6 @@ const Navigation: React.FC = () => {
       };
     }
   }, []);
-
-  useEffect(() => {
-    setNrItems(nrItem);
-  }, [nrItem]);
   return (
     <nav>
       <div
@@ -44,19 +44,19 @@ const Navigation: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Link
-                  href="/contacte"
+                  href={`/${language}/contacte`}
                   className="hover:text-purple-600 mx-2 cursor-pointer"
                 >
                   Contacte
                 </Link>
                 <Link
-                  href="/"
+                  href={`/${language}/`}
                   className="hover:text-purple-600 mx-2 cursor-pointer"
                 >
                   Calitate
                 </Link>
                 <Link
-                  href="/"
+                  href={`/${language}/`}
                   className="hover:text-purple-600 mx-2 cursor-pointer"
                 >
                   Cariera
@@ -64,17 +64,14 @@ const Navigation: React.FC = () => {
               </div>
               <div className="flex gap-4">
                 <div
+                  className="cursor-pointer"
                   style={{
                     position: "relative",
                     display: "flex",
                     alignItems: "center",
                   }}
                 >
-                  <Image
-                    className="cursor-pointer"
-                    alt="shop_icons"
-                    src={logo}
-                  />
+                  <Image alt="shop_icons" src={logo} />
                   <div
                     className="absolute flex justify-center items-center rounded-full bg-red-500"
                     style={{
@@ -86,11 +83,35 @@ const Navigation: React.FC = () => {
                       fontSize: 15,
                     }}
                   >
-                    {nrItems}
+                    {basketItemCount}
                   </div>
                 </div>
-                <div className="flex">
-                  <button>RO</button>/<button>RU</button>
+                <div
+                  className="flex"
+                  style={{
+                    fontSize: 17,
+                  }}
+                >
+                  <button
+                    onClick={() => setLanguage("ro")}
+                    style={{
+                      borderBottom: `${language === "ro" ? "1px solid" : ""}`,
+                    }}
+                  >
+                    RO
+                  </button>
+                  /
+                  <button
+                    onClick={() => setLanguage("ro")}
+                    className="group"
+                    style={{
+                      borderBottom: `${
+                        language === "ru" ? "1px solid group" : ""
+                      }`,
+                    }}
+                  >
+                    RU
+                  </button>
                 </div>
               </div>
             </div>
@@ -108,7 +129,9 @@ const Navigation: React.FC = () => {
             borderBottom: "0.5px solid black",
           }}
         >
-          <b className="cursor-pointer">aureoma.</b>
+          <b className="cursor-pointer">
+            <Link href="/">aureoma.</Link>
+          </b>
         </div>
         {isLarge ? (
           <div
@@ -119,31 +142,31 @@ const Navigation: React.FC = () => {
           >
             <div>
               <Link
-                href="/inele"
+                href={`/${language}/inele`}
                 className="hover:text-purple-600 mx-2 cursor-pointer"
               >
                 Inele
               </Link>
               <Link
-                href="/cercei"
+                href={`/${language}/cercei`}
                 className="hover:text-purple-600 mx-2 cursor-pointer"
               >
                 Cercei
               </Link>
               <Link
-                href="/lanturi"
+                href={`/${language}/lanturi`}
                 className="hover:text-purple-600 mx-2 cursor-pointer"
               >
                 Lanturi
               </Link>
               <Link
-                href="/bratari"
+                href={`/${language}/bratari`}
                 className="hover:text-purple-600 mx-2 cursor-pointer"
               >
                 Bratari
               </Link>
               <Link
-                href="/pandantive"
+                href={`/${language}/pandantive`}
                 className="hover:text-purple-600 mx-2 cursor-pointer"
               >
                 Pandantive

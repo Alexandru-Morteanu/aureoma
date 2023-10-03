@@ -5,7 +5,7 @@ import { supabase } from "@/app/components/supabase";
 import Filter from "@/app/components/Filter";
 import Sort from "@/app/components/Sort";
 import { ItemData } from "../../../constants";
-import Table from "../components/Table";
+import Table from "../components/display/Table";
 
 function Magazin() {
   const { push } = useRouter();

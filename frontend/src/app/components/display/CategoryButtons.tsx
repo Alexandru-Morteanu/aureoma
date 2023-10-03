@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { ITEMS } from "../../../constants";
+import { ITEMS } from "../../../../constants";
 
 function CategoryButtons() {
   const { push } = useRouter();

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ItemData, PRET_ARGINT, PRET_AUR } from "../../../constants";
+import { ItemData, PRET_ARGINT, PRET_AUR } from "../../../../constants";
 import { supabase } from "@/app/components/supabase";
 import Image from "next/image";
 
@@ -9,7 +9,12 @@ type TableProps = {
   handleDetails: (index: number) => void;
   sort: string;
   filter: boolean;
-  pretRange: { min: number | undefined; max: number | undefined };
+  filterData: {
+    min: number | undefined;
+    max: number | undefined;
+    aur: boolean;
+    argint: boolean;
+  };
   originalIndices: number[];
   setOriginalIndices: Function;
 };
@@ -19,7 +24,7 @@ function Table({
   handleDetails,
   sort,
   filter,
-  pretRange,
+  filterData,
   originalIndices,
   setOriginalIndices,
 }: TableProps) {
@@ -75,32 +80,42 @@ function Table({
           });
           break;
       }
-
+      const newIndices: number[] = [];
       const sortedFilteredData = indices
         .filter((index) => {
           const item = tableData[index];
           if (
-            pretRange &&
+            filterData &&
             calcPret(item.category, item.greutate) >=
-              (pretRange.min !== undefined ? pretRange.min : 0) &&
+              (filterData.min !== undefined ? filterData.min : 0) &&
             calcPret(item.category, item.greutate) <=
-              (pretRange.max !== undefined
-                ? pretRange.max
+              (filterData.max !== undefined
+                ? filterData.max
                 : Number.MAX_SAFE_INTEGER)
           ) {
             return true;
           }
-          if (!pretRange) {
+          if (!filterData) {
+            return true;
+          }
+          return false;
+        })
+        .filter((index) => {
+          const item = tableData[index];
+          if (
+            (item.category === "Aur") === filterData.aur ||
+            (item.category === "Argint") === filterData.argint
+          ) {
+            newIndices.push(index);
             return true;
           }
           return false;
         })
         .map((index) => tableData[index]);
-
       setSortedData([...sortedFilteredData]);
-      setOriginalIndices([...indices]);
+      setOriginalIndices([...newIndices]);
     }
-  }, [sort, filter, pretRange, tableData]);
+  }, [sort, filter, filterData, tableData]);
 
   useEffect(() => {
     getImageUrl();

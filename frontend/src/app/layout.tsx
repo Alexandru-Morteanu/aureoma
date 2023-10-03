@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navigation from "./components/Navigation";
 import dynamic from "next/dynamic";
+import { BasketProvider } from "./components/Basket";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,8 +34,10 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={inter.className}>
-        <DynamicNavigation />
-        {children}
+        <BasketProvider>
+          <DynamicNavigation />
+          {children}
+        </BasketProvider>
       </body>
     </html>
   );

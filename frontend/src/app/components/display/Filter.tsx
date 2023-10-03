@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 type Props = {
   handleFilter: (index: string) => void;
-  pretRange: { min: number | undefined; max: number | undefined };
-  setPretRange: Function;
+  filterData: {
+    min: number | undefined;
+    max: number | undefined;
+    aur: boolean;
+    argint: boolean;
+  };
+  setFilterData: Function;
 };
 export default function Filter({
   handleFilter,
-  pretRange,
-  setPretRange,
+  filterData,
+  setFilterData,
 }: Props) {
   return (
     <div className="flex items-center flex-col m-6" style={{ width: 200 }}>
@@ -24,11 +29,11 @@ export default function Filter({
               type="number"
               className="border border-gray-300 rounded-md p-2"
               style={{ width: "80%" }}
-              value={pretRange.min === undefined ? "" : pretRange.min}
+              value={filterData.min === undefined ? "" : filterData.min}
               onChange={(e) => {
                 const value = e.target.value;
-                setPretRange({
-                  ...pretRange,
+                setFilterData({
+                  ...filterData,
                   min: value === "" ? undefined : parseFloat(value),
                 });
               }}
@@ -38,16 +43,45 @@ export default function Filter({
               type="number"
               style={{ width: "80%" }}
               className="border border-gray-300 rounded-md p-2"
-              value={pretRange.max === undefined ? "" : pretRange.max}
+              value={filterData.max === undefined ? "" : filterData.max}
               onChange={(e) => {
                 const value = e.target.value;
-                setPretRange({
-                  ...pretRange,
+                setFilterData({
+                  ...filterData,
                   max: value === "" ? undefined : parseFloat(value),
                 });
               }}
               placeholder="Max Pret"
             />{" "}
+            <b>Material</b>
+            <div>
+              <label className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  name="aurCheckbox"
+                  onChange={(e) => {
+                    setFilterData({
+                      ...filterData,
+                      aur: e.target.checked,
+                    });
+                  }}
+                />
+                Aur
+              </label>
+              <label className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  name="argintCheckbox"
+                  onChange={(e) => {
+                    setFilterData({
+                      ...filterData,
+                      argint: e.target.checked,
+                    });
+                  }}
+                />
+                Argint
+              </label>
+            </div>
           </div>
         </div>
       </div>

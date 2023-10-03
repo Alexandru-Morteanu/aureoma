@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ItemData, PRET_ARGINT, PRET_AUR } from "../../../constants";
 import { supabase } from "@/app/components/supabase";
+import { useBasket } from "./Basket";
 type ItemDataExpand = {
   id: number;
   category: string;
@@ -23,15 +24,19 @@ export const Details = ({
   const [newData, setNewData] = useState<ItemDataExpand>(
     data[originalIndices[index]]
   );
+  const { updateBasketItemCount } = useBasket();
+
   useEffect(() => {
     console.log(originalIndices);
   }, [originalIndices]);
+
   const handleContentChange = (key: string, value: string) => {
     setNewData((prevData) => ({
       ...prevData,
       [key]: value,
     }));
   };
+
   async function handleStoreEdit() {
     try {
       if (isNaN(newData.greutate) || isNaN(newData.marime)) {
@@ -46,6 +51,7 @@ export const Details = ({
       console.log(error);
     }
   }
+
   return (
     <div className="fixed top-0 left-0 flex justify-center items-center w-full min-h-screen bg-black bg-opacity-80 z-10">
       <div className="bg-black w-4/5 sm:w-2/3 md:w-1/2 lg:w-2/5 xl:w-1/3 p-6 rounded-lg shadow-lg text-white relative">
@@ -137,6 +143,15 @@ export const Details = ({
             }}
           >
             Delete
+          </button>
+          <button
+            className="bg-red-500 text-white py-2 px-4 rounded-full ml-4 hover:bg-red-600 transition duration-300"
+            onClick={() => {
+              closeDetails();
+              updateBasketItemCount((prevCount: number) => prevCount + 1);
+            }}
+          >
+            +
           </button>
         </div>
       </div>

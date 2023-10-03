@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/components/lessCode/axios";
 import { ItemData } from "../../../../constants";
 import { supabase } from "@/app/components/supabase";
-import Table from "../../components/Table";
-import CategoryButtons from "@/app/components/CategoryButtons";
+import Table from "../../components/display/Table";
+import CategoryButtons from "@/app/components/display/CategoryButtons";
 import { Details } from "@/app/components/Details";
-import Filter from "@/app/components/Filter";
-import Sort from "@/app/components/Sort";
+import Filter from "@/app/components/display/Filter";
+import Sort from "@/app/components/display/Sort";
 
 function Dashboard() {
   const { push } = useRouter();
@@ -17,13 +17,17 @@ function Dashboard() {
   const [expandDetails, setExpandDetails] = useState<boolean>(false);
   const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
   const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
+  const [aurChecked, setAurChecked] = useState<boolean>(false);
+  const [argintChecked, setArgintChecked] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [originalIndices, setOriginalIndices] = useState<number[]>([]);
   const [details, setDetails] = useState<number>();
-  const [pretRange, setPretRange] = useState<{
+  const [filterData, setFilterData] = useState<{
     min: number | undefined;
     max: number | undefined;
-  }>({ min: undefined, max: undefined });
+    aur: boolean;
+    argint: boolean;
+  }>({ min: undefined, max: undefined, aur: false, argint: false });
 
   const [sort, setSort] = useState<string>("");
 
@@ -94,8 +98,8 @@ function Dashboard() {
           }}
         >
           <Filter
-            pretRange={pretRange}
-            setPretRange={setPretRange}
+            filterData={filterData}
+            setFilterData={setFilterData}
             handleFilter={handleFilter}
           />
           <div className="w-100">
@@ -113,7 +117,7 @@ function Dashboard() {
               sort={sort}
               tableData={tableData}
               handleDetails={handleDetails}
-              pretRange={pretRange}
+              filterData={filterData}
               filter={filter}
               originalIndices={originalIndices}
               setOriginalIndices={setOriginalIndices}

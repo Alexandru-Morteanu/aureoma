@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { sortOptionsCresc, sortOptionsDesc } from "../../../constants";
+import { sortOptionsCresc, sortOptionsDesc } from "../../../../constants";
 type Props = {
   handleSort: (index: string) => void;
   expandSortCresc: boolean;
