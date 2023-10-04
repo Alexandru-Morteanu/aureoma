@@ -17,9 +17,6 @@ function Dashboard() {
   const [expandDetails, setExpandDetails] = useState<boolean>(false);
   const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
   const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
-  const [aurChecked, setAurChecked] = useState<boolean>(false);
-  const [argintChecked, setArgintChecked] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
   const [originalIndices, setOriginalIndices] = useState<number[]>([]);
   const [details, setDetails] = useState<number>();
   const [filterData, setFilterData] = useState<{
@@ -28,7 +25,6 @@ function Dashboard() {
     aur: boolean;
     argint: boolean;
   }>({ min: undefined, max: undefined, aur: false, argint: false });
-
   const [sort, setSort] = useState<string>("");
 
   useEffect(() => {
@@ -80,9 +76,6 @@ function Dashboard() {
     setExpandSortCresc(false);
     setExpandSortDesc(false);
   }
-  function handleFilter(sortBy: string) {
-    console.log("ok");
-  }
   return (
     <div className="w-100 flex justify-center mt-5">
       <div
@@ -97,11 +90,7 @@ function Dashboard() {
             width: "100%",
           }}
         >
-          <Filter
-            filterData={filterData}
-            setFilterData={setFilterData}
-            handleFilter={handleFilter}
-          />
+          <Filter filterData={filterData} setFilterData={setFilterData} />
           <div className="w-100">
             <div className="flex items-center justify-between mx-8">
               <b className="text-4xl">Admin</b>
@@ -118,7 +107,6 @@ function Dashboard() {
               tableData={tableData}
               handleDetails={handleDetails}
               filterData={filterData}
-              filter={filter}
               originalIndices={originalIndices}
               setOriginalIndices={setOriginalIndices}
             />

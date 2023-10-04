@@ -1,5 +1,6 @@
+import TableKIT from "@/app/components/TableKIT";
 import React from "react";
 
 export default function page() {
-  return <div>Inele</div>;
+  return <TableKIT articol="Inel" />;
 }

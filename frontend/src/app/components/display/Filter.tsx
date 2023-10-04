@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 type Props = {
-  handleFilter: (index: string) => void;
   filterData: {
     min: number | undefined;
     max: number | undefined;
@@ -9,11 +8,7 @@ type Props = {
   };
   setFilterData: Function;
 };
-export default function Filter({
-  handleFilter,
-  filterData,
-  setFilterData,
-}: Props) {
+export default function Filter({ filterData, setFilterData }: Props) {
   return (
     <div className="flex items-center flex-col m-6" style={{ width: 200 }}>
       <div className=" flex justify-center">

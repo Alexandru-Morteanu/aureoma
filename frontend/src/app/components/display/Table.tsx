@@ -8,7 +8,6 @@ type TableProps = {
   tableData: ItemData[];
   handleDetails: (index: number) => void;
   sort: string;
-  filter: boolean;
   filterData: {
     min: number | undefined;
     max: number | undefined;
@@ -23,7 +22,6 @@ function Table({
   tableData,
   handleDetails,
   sort,
-  filter,
   filterData,
   originalIndices,
   setOriginalIndices,
@@ -115,7 +113,7 @@ function Table({
       setSortedData([...sortedFilteredData]);
       setOriginalIndices([...newIndices]);
     }
-  }, [sort, filter, filterData, tableData]);
+  }, [sort, filterData, tableData]);
 
   useEffect(() => {
     getImageUrl();
