@@ -1,14 +1,49 @@
 import React, { useState } from "react";
+import { FilterSchema } from "../../../../constants";
 type Props = {
-  filterData: {
-    min: number | undefined;
-    max: number | undefined;
-    aur: boolean;
-    argint: boolean;
-  };
+  filterData: FilterSchema;
   setFilterData: Function;
 };
 export default function Filter({ filterData, setFilterData }: Props) {
+  const handleFilterChange = (key: string) => {
+    if (key === "aur" || key === "argint") {
+      setFilterData({
+        ...filterData,
+        material: {
+          ...filterData.material,
+          [key]: !filterData.material[key],
+        },
+      });
+    } else if (key in filterData.model) {
+      setFilterData({
+        ...filterData,
+        model: {
+          ...filterData.model,
+          [key]: !filterData.model[key],
+        },
+      });
+    } else if (filterData.marime && key in filterData.marime) {
+      setFilterData({
+        ...filterData,
+        marime: {
+          ...filterData.marime,
+          [key]: !filterData.marime[key],
+        },
+      });
+    }
+  };
+
+  const handleInputChange = (e: any, category: string, type: string) => {
+    const value = e.target.value;
+    setFilterData((prev: any) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [type]: value === "" ? undefined : parseFloat(value),
+      },
+    }));
+  };
+
   return (
     <div className="flex items-center flex-col m-6" style={{ width: 200 }}>
       <div className=" flex justify-center">
@@ -19,67 +54,69 @@ export default function Filter({ filterData, setFilterData }: Props) {
               width: 150,
             }}
           >
+            <b>Material</b>
+            {renderCheckboxes(filterData.material, handleFilterChange)}
+            <b className=" bg-red-500">Model</b>
+            {renderCheckboxes(filterData.model, handleFilterChange)}
+            {filterData.marime && Object.keys(filterData.marime).length > 0 && (
+              <>
+                <b>Marime</b>
+                {renderCheckboxes(filterData.marime, handleFilterChange)}
+              </>
+            )}
             <b>Pret</b>
             <input
               type="number"
               className="border border-gray-300 rounded-md p-2"
               style={{ width: "80%" }}
-              value={filterData.min === undefined ? "" : filterData.min}
-              onChange={(e) => {
-                const value = e.target.value;
-                setFilterData({
-                  ...filterData,
-                  min: value === "" ? undefined : parseFloat(value),
-                });
-              }}
+              value={filterData.pret.min ?? ""}
+              onChange={(e) => handleInputChange(e, "pret", "min")}
               placeholder="Min Pret"
             />
             <input
               type="number"
               style={{ width: "80%" }}
               className="border border-gray-300 rounded-md p-2"
-              value={filterData.max === undefined ? "" : filterData.max}
-              onChange={(e) => {
-                const value = e.target.value;
-                setFilterData({
-                  ...filterData,
-                  max: value === "" ? undefined : parseFloat(value),
-                });
-              }}
+              value={filterData.pret.max ?? ""}
+              onChange={(e) => handleInputChange(e, "pret", "max")}
               placeholder="Max Pret"
-            />{" "}
-            <b>Material</b>
-            <div>
-              <label className="flex gap-2 items-center">
-                <input
-                  type="checkbox"
-                  name="aurCheckbox"
-                  onChange={(e) => {
-                    setFilterData({
-                      ...filterData,
-                      aur: e.target.checked,
-                    });
-                  }}
-                />
-                Aur
-              </label>
-              <label className="flex gap-2 items-center">
-                <input
-                  type="checkbox"
-                  name="argintCheckbox"
-                  onChange={(e) => {
-                    setFilterData({
-                      ...filterData,
-                      argint: e.target.checked,
-                    });
-                  }}
-                />
-                Argint
-              </label>
-            </div>
+            />
+            <b>Greutate</b>
+            <input
+              type="number"
+              className="border border-gray-300 rounded-md p-2"
+              style={{ width: "80%" }}
+              value={filterData.greutate.min ?? ""}
+              onChange={(e) => handleInputChange(e, "greutate", "min")}
+              placeholder="Min Greutate"
+            />
+            <input
+              type="number"
+              style={{ width: "80%" }}
+              className="border border-gray-300 rounded-md p-2"
+              value={filterData.greutate.max ?? ""}
+              onChange={(e) => handleInputChange(e, "greutate", "max")}
+              placeholder="Max Greutate"
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
+const renderCheckboxes = (data: any, handleFilterChange: any) => {
+  return (
+    <div className="max-h-32 overflow-y-auto">
+      {Object.keys(data).map((key) => (
+        <label key={key} className="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            checked={data[key]}
+            onChange={() => handleFilterChange(key)}
+          />
+          {key}
+        </label>
+      ))}
+    </div>
+  );
+};

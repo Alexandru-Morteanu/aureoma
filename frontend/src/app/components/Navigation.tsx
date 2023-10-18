@@ -123,14 +123,17 @@ const Navigation = () => {
           className="w-100 bg-yellow-300 flex justify-center items-center"
           style={{
             height: 150,
-            fontFamily: "'Pacifico', cursive",
             fontSize: 50,
             borderTop: "0.5px solid black",
             borderBottom: "0.5px solid black",
+            // fontFamily: "Asap, sans-serif",
+            // fontFamily: "League Spartan, sans-serif",
+            fontFamily: "Noto Serif, serif",
+            // fontFamily: "Pacifico, cursive",
           }}
         >
           <b className="cursor-pointer">
-            <Link href="/">aureoma.</Link>
+            <Link href="/">auroma.</Link>
           </b>
         </div>
         {isLarge ? (

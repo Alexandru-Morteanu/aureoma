@@ -26,10 +26,10 @@ export default function RootLayout({
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
+          crossOrigin=""
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,600&family=League+Spartan:wght@500&family=Pacifico&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,600&family=League+Spartan:wght@500&family=Noto+Serif:wght@500&family=Pacifico&display=swap"
           rel="stylesheet"
         ></link>
       </head>

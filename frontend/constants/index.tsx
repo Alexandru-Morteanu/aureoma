@@ -6,23 +6,64 @@ export const SUPABASE_KEY =
 export const ITEMS = ["Inel", "Cercei", "Lant", "Bratara", "Pandantiv"];
 export const MARIME = {
   Inel: [
-    25.0, 25.5, 26.0, 26.5, 27.0, 27.5, 28.0, 28.5, 29.0, 29.5, 30.0, 30.5,
-    31.0, 32.0, 32.5,
+    "25.0",
+    "25.5",
+    "26.0",
+    "26.5",
+    "27.0",
+    "27.5",
+    "28.0",
+    "28.5",
+    "29.0",
+    "29.5",
+    "30.0",
+    "30.5",
+    "31.0",
+    "32.0",
+    "32.5",
   ],
   Lant: [40, 45, 50, 55, 60],
   Bratara: [14, 15, 16, 17, 18, 19],
+};
+export const MODEL = {
+  Lant: ["Bismark", "Nona", "Gourme", "Altele"],
+  Inel: ["Verighete", "Logodna", "Altele"],
+  Pandantive: ["Iconite", "Cruciulite", "Zodii", "Altele"],
+  Cercei: ["Copii", "Altele"],
+  admin: ["Inele", "Cercei", "Lanturi", "Bratari", "Pandantive"],
 };
 export const PRET_AUR = 1400;
 export const PRET_ARGINT = 100;
 export type ItemData = {
   category: string;
   articol: string;
-  denumire: string;
+  model: string;
   descriere: string;
   marime: number;
   greutate: number;
-  imageUrl: string;
+  imageurl: string;
+  pret: number;
 };
+export type FilterSchema = {
+  pret: {
+    min: number | undefined;
+    max: number | undefined;
+  };
+  greutate: {
+    min: number | undefined;
+    max: number | undefined;
+  };
+  material: {
+    [key: string]: boolean;
+  };
+  model: {
+    [key: string]: boolean;
+  };
+  marime?: {
+    [key: string]: boolean;
+  };
+};
+
 export const sortOptionsCresc = [
   { label: "Pret ↑", value: "PretCresc" },
   { label: "Greutate ↑", value: "GreutateCresc" },

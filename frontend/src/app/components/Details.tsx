@@ -6,7 +6,7 @@ type ItemDataExpand = {
   id: number;
   category: string;
   articol: string;
-  denumire: string;
+  model: string;
   descriere: string;
   marime: number;
   greutate: number;
@@ -19,16 +19,9 @@ export const Details = ({
   closeDetails,
   saveDetails,
   handleDelete,
-  originalIndices,
 }: any) => {
-  const [newData, setNewData] = useState<ItemDataExpand>(
-    data[originalIndices[index]]
-  );
+  const [newData, setNewData] = useState<ItemDataExpand>(data[index]);
   const { updateBasketItemCount } = useBasket();
-
-  useEffect(() => {
-    console.log(originalIndices);
-  }, [originalIndices]);
 
   const handleContentChange = (key: string, value: string) => {
     setNewData((prevData) => ({
@@ -45,7 +38,14 @@ export const Details = ({
       }
       const { data, error } = await supabase
         .from("item")
-        .update(newData)
+        .update({
+          model: newData.model,
+          descriere: newData.descriere,
+          marime: newData.marime,
+          greutate: newData.greutate,
+          pret: newData.pret,
+          imageurl: newData.imageUrl,
+        })
         .eq("id", newData.id);
     } catch (error) {
       console.log(error);
@@ -71,27 +71,21 @@ export const Details = ({
           {newData?.articol}
         </div>
         <div className="mb-4">
-          <label htmlFor="denumire" className="text-gray-400">
-            Denumire:
-          </label>
+          <b className="text-gray-400">Model:</b>
           <Editable
             onChange={(value) => handleContentChange("denumire", value)}
-            item={newData?.denumire}
+            item={newData?.model}
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="descriere" className="text-gray-400">
-            Descriere:
-          </label>
+          <b className="text-gray-400">Descriere:</b>
           <Editable
             onChange={(value) => handleContentChange("descriere", value)}
             item={newData?.descriere}
           />
         </div>
         <div className="mb-4 flex items-center">
-          <label htmlFor="marime" className="text-gray-400">
-            Marime:
-          </label>
+          <b className="text-gray-400">Marime:</b>
           <Editable
             onChange={(value) => handleContentChange("marime", value)}
             item={newData?.marime}
@@ -99,9 +93,7 @@ export const Details = ({
           <span className="ml-2">cm</span>
         </div>
         <div className="mb-4 flex items-center">
-          <label htmlFor="greutate" className="text-gray-400">
-            Greutate:
-          </label>
+          <b className="text-gray-400">Greutate:</b>
           <Editable
             onChange={(value: any) => {
               handleContentChange("greutate", value);
@@ -130,7 +122,7 @@ export const Details = ({
             className="bg-green-400 text-black py-2 px-4 rounded-full hover:bg-green-500 transition duration-300"
             onClick={() => {
               handleStoreEdit();
-              saveDetails(newData, originalIndices[index]);
+              saveDetails(newData, data[index]);
             }}
           >
             Save
@@ -167,6 +159,7 @@ function Editable({
 }) {
   const handleContentChange = (e: React.ChangeEvent<HTMLDivElement>) => {
     onChange(e.currentTarget.textContent || "");
+    console.log(item);
   };
   return (
     <div
