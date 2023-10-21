@@ -22,7 +22,9 @@ export const Details = ({
 }: any) => {
   const [newData, setNewData] = useState<ItemDataExpand>(data[index]);
   const { updateBasketItemCount } = useBasket();
-
+  useEffect(() => {
+    console.log(newData);
+  }, [newData]);
   const handleContentChange = (key: string, value: string) => {
     setNewData((prevData) => ({
       ...prevData,
@@ -115,7 +117,7 @@ export const Details = ({
           <span className="ml-2">g</span>
         </div>
         <div className="text-lg font-medium text-center mb-4">
-          Pret: {newData?.pret}MDL
+          Pret: {newData?.pret.toLocaleString()}MDL
         </div>
         <div className="text-center">
           <button

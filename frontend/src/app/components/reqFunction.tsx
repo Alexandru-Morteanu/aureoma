@@ -6,16 +6,14 @@ type Props = {
   filterData: FilterSchema;
   sortData: string;
   pageNumber: number;
-  range: boolean;
 };
 export default async function reqSupabase({
   articol,
   filterData,
   sortData,
   pageNumber,
-  range,
 }: Props) {
-  const filteredReq = supabase
+  const filteredReq: any = supabase
     .rpc("filter", {
       aur_value: PRET_AUR,
       argint_value: PRET_ARGINT,
@@ -79,13 +77,13 @@ export default async function reqSupabase({
       filteredReq.order("articol", { ascending: true });
       break;
   }
-  console.log(pageNumber);
-  if (range) {
-    filteredReq.range((pageNumber - 1) * 3, pageNumber * 3 - 1);
-  } else {
-    filteredReq.range(0, pageNumber * 3 - 1);
-  }
+
+  let stop = false;
+  filteredReq.range((pageNumber - 1) * 3, pageNumber * 3 - 1);
 
   const { data, error } = await filteredReq;
-  return data;
+  if (data.length < 1) {
+    stop = true;
+  }
+  return { data: data, stop: stop };
 }

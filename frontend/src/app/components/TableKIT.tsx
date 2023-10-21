@@ -5,6 +5,7 @@ import Sort from "./display/Sort";
 import Table from "./display/Table";
 import { FilterSchema, ItemData, MARIME, MODEL } from "../../../constants";
 import reqSupabase from "./reqFunction";
+import { Data } from "../admin/dashboard/page";
 
 type Props = {
   articol: string;
@@ -45,6 +46,8 @@ export default function TableKIT({ articol }: Props) {
   const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
   const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
   const [nextReq, setNextReq] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [stopLoading, setStopLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<number>();
   const [sortData, setSortData] = useState<string>("");
   const [pageNumber, setPageNumber] = useState(1);
@@ -60,8 +63,13 @@ export default function TableKIT({ articol }: Props) {
   });
 
   useEffect(() => {
-    // handleRefresh(pageNumber, false);
-    console.log(filterData);
+    console.log(nextReq, stopLoading);
+    if (pageNumber !== 1) {
+      setPageNumber(1);
+      setStopLoading(false);
+      setNextReq(true);
+      setTableData([]);
+    }
   }, [filterData, sortData]);
 
   useEffect(() => {
@@ -69,27 +77,28 @@ export default function TableKIT({ articol }: Props) {
   }, [pageNumber]);
 
   useEffect(() => {
-    if (nextReq) {
+    if (nextReq && !stopLoading) {
       const newPageNumber = pageNumber + 1;
-      console.log(newPageNumber);
       setPageNumber(newPageNumber);
       setNextReq(false);
     }
-  }, [nextReq]);
+  }, [nextReq, stopLoading]);
 
   async function handleRefresh(pageNumber: number, range: boolean) {
     try {
-      const data: ItemData[] = await reqSupabase({
+      const req: Data = await reqSupabase({
         articol: articol,
         filterData,
         sortData,
         pageNumber,
-        range,
       });
+      if (req.stop) {
+        setStopLoading(true);
+      }
       if (range) {
-        setTableData((prevItems) => [...prevItems, ...data]);
-      } else {
-        setTableData(data);
+        setTableData((prevItems) => [...prevItems, ...req.data]);
+      } else if (!range && pageNumber > 1) {
+        setTableData(req.data);
       }
     } catch (error) {}
   }

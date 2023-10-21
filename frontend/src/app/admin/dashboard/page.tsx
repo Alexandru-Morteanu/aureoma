@@ -10,7 +10,10 @@ import { Details } from "@/app/components/Details";
 import Filter from "@/app/components/display/Filter";
 import Sort from "@/app/components/display/Sort";
 import reqSupabase from "@/app/components/reqFunction";
-
+export type Data = {
+  data: ItemData[];
+  stop: boolean;
+};
 function Dashboard() {
   const { push } = useRouter();
   const [showMoreButtons, setShowMoreButtons] = useState<boolean>(false);
@@ -18,6 +21,7 @@ function Dashboard() {
   const [expandDetails, setExpandDetails] = useState<boolean>(false);
   const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
   const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
+  const [stopLoading, setStopLoading] = useState<boolean>(false);
   const [nextReq, setNextReq] = useState<boolean>(false);
   const [details, setDetails] = useState<number>();
   const [pageNumber, setPageNumber] = useState(1);
@@ -33,9 +37,12 @@ function Dashboard() {
   const [sortData, setSortData] = useState<string>("");
 
   useEffect(() => {
-    handleRefresh(pageNumber, false);
-    console.log(filterData);
-  }, [filterData, sortData, details]);
+    console.log(nextReq, stopLoading);
+    setPageNumber(1);
+    setStopLoading(false);
+    setNextReq(true);
+    setTableData([]);
+  }, [filterData, sortData]);
 
   async function handleLogout() {
     try {
@@ -49,27 +56,28 @@ function Dashboard() {
   }, [pageNumber]);
 
   useEffect(() => {
-    if (nextReq) {
+    if (nextReq && !stopLoading) {
       const newPageNumber = pageNumber + 1;
-      console.log(newPageNumber);
       setPageNumber(newPageNumber);
       setNextReq(false);
     }
-  }, [nextReq]);
+  }, [nextReq, stopLoading]);
 
   async function handleRefresh(pageNumber: number, range: boolean) {
     try {
-      const data: ItemData[] = await reqSupabase({
+      const req: Data = await reqSupabase({
         articol: "*",
         filterData,
         sortData,
         pageNumber,
-        range,
       });
+      if (req.stop) {
+        setStopLoading(true);
+      }
       if (range) {
-        setTableData((prevItems) => [...prevItems, ...data]);
-      } else {
-        setTableData(data);
+        setTableData((prevItems) => [...prevItems, ...req.data]);
+      } else if (!range && pageNumber > 1) {
+        setTableData(req.data);
       }
     } catch (error) {}
   }
@@ -98,7 +106,7 @@ function Dashboard() {
         console.error(error);
         return;
       }
-      const { data } = await supabase.from("item").delete().eq("id", id);
+      await supabase.from("item").delete().eq("id", id);
       handleRefresh(pageNumber, false);
     } catch (error) {}
   }

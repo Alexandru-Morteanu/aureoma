@@ -126,10 +126,6 @@ const Navigation = () => {
             fontSize: 50,
             borderTop: "0.5px solid black",
             borderBottom: "0.5px solid black",
-            // fontFamily: "Asap, sans-serif",
-            // fontFamily: "League Spartan, sans-serif",
-            fontFamily: "Noto Serif, serif",
-            // fontFamily: "Pacifico, cursive",
           }}
         >
           <b className="cursor-pointer">
