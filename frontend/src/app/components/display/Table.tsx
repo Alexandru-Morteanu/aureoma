@@ -38,7 +38,6 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
   };
 
   useEffect(() => {
-    console.log("observe");
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
       rootMargin: "0px",
@@ -154,5 +153,4 @@ TO DO
   Modele 
     Add 
     Edit 
-  Schelete
 */

@@ -27,10 +27,10 @@ export const MARIME = {
 };
 export const MODEL = {
   Lant: ["Bismark", "Nona", "Gourme", "Altele"],
-  Inel: ["Verighete", "Logodna", "Altele"],
+  Inel: ["Verigheta", "Logodna", "Altele"],
   Pandantive: ["Iconite", "Cruciulite", "Zodii", "Altele"],
   Cercei: ["Copii", "Altele"],
-  admin: ["Inele", "Cercei", "Lanturi", "Bratari", "Pandantive"],
+  admin: ITEMS,
 };
 export const PRET_AUR = 1400;
 export const PRET_ARGINT = 100;
@@ -39,7 +39,7 @@ export type ItemData = {
   articol: string;
   model: string;
   descriere: string;
-  marime: number;
+  marime: number | string;
   greutate: number;
   imageurl: string;
   pret: number;

@@ -117,7 +117,7 @@ export default function TableKIT({ articol }: Props) {
   return (
     <div className="w-100 flex justify-center mt-5">
       <div
-        className="flex"
+        className="alex"
         style={{
           width: "80%",
         }}

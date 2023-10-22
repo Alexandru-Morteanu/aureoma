@@ -14,7 +14,7 @@ export default function Add({}) {
   const category = useSearchParams().get("category") ?? "";
   const item = useSearchParams().get("item") ?? "";
   const { push } = useRouter();
-  const [marimeOptions, setMarimeOptions] = useState<number[]>([]);
+  const [marimeOptions, setMarimeOptions] = useState<number[] | string[]>([]);
   const [modelOptions, setModelOptions] = useState<string[]>([]);
   const [expandMarime, setExpandMarime] = useState<boolean>(false);
   const [expandModel, setExpandModel] = useState<boolean>(false);
@@ -30,6 +30,7 @@ export default function Add({}) {
     marime: 0,
     greutate: 0,
     imageurl: "",
+    pret: 0,
   });
 
   useEffect(() => {

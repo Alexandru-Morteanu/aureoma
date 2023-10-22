@@ -37,7 +37,7 @@ function Dashboard() {
   const [sortData, setSortData] = useState<string>("");
 
   useEffect(() => {
-    console.log(nextReq, stopLoading);
+    console.log(filterData);
     setPageNumber(1);
     setStopLoading(false);
     setNextReq(true);
@@ -90,7 +90,7 @@ function Dashboard() {
   function saveDetails(data: ItemData, index: number) {
     const newData = [...tableData];
     newData[index] = data;
-    if (isNaN(data.greutate) || isNaN(data.marime)) {
+    if (isNaN(data.greutate)) {
       alert("detalii gresite");
       return;
     }

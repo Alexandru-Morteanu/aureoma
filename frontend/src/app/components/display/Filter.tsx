@@ -56,7 +56,7 @@ export default function Filter({ filterData, setFilterData }: Props) {
           >
             <b>Material</b>
             {renderCheckboxes(filterData.material, handleFilterChange)}
-            <b className=" bg-red-500">Model</b>
+            <b>Model</b>
             {renderCheckboxes(filterData.model, handleFilterChange)}
             {filterData.marime && Object.keys(filterData.marime).length > 0 && (
               <>
@@ -120,3 +120,9 @@ const renderCheckboxes = (data: any, handleFilterChange: any) => {
     </div>
   );
 };
+/*
+TODO
+  Edit/Add - Modele
+  BUY
+  CHART
+*/

@@ -53,7 +53,22 @@ export default async function reqSupabase({
       filteredReq.in("marime", trueMarimeKeys);
     }
   }
-
+  const trueKeys = [];
+  for (const key in filterData.model) {
+    if (filterData.model[key] === true) {
+      trueKeys.push(key);
+    }
+  }
+  console.log(trueKeys);
+  if (filterData.model["Inel"] !== undefined) {
+    if (trueKeys.length > 0) {
+      filteredReq.in("articol", trueKeys);
+    }
+  } else {
+    if (trueKeys.length > 0) {
+      filteredReq.in("model", trueKeys);
+    }
+  }
   switch (sortData) {
     case "PretCresc":
       filteredReq.order("pret", { ascending: true });
