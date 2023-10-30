@@ -59,7 +59,6 @@ export default async function reqSupabase({
       trueKeys.push(key);
     }
   }
-  console.log(trueKeys);
   if (filterData.model["Inel"] !== undefined) {
     if (trueKeys.length > 0) {
       filteredReq.in("articol", trueKeys);
@@ -69,6 +68,10 @@ export default async function reqSupabase({
       filteredReq.in("model", trueKeys);
     }
   }
+
+  let stop = false;
+  filteredReq.range((pageNumber - 1) * 3, pageNumber * 3 - 1);
+
   switch (sortData) {
     case "PretCresc":
       filteredReq.order("pret", { ascending: true });
@@ -92,10 +95,6 @@ export default async function reqSupabase({
       filteredReq.order("articol", { ascending: true });
       break;
   }
-
-  let stop = false;
-  filteredReq.range((pageNumber - 1) * 3, pageNumber * 3 - 1);
-
   const { data, error } = await filteredReq;
   if (data.length < 1) {
     stop = true;

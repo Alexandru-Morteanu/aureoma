@@ -3,8 +3,15 @@ import { FilterSchema } from "../../../../constants";
 type Props = {
   filterData: FilterSchema;
   setFilterData: Function;
+  setFilterTrigger: Function;
+  filterTrigger: boolean;
 };
-export default function Filter({ filterData, setFilterData }: Props) {
+export default function Filter({
+  filterData,
+  setFilterData,
+  setFilterTrigger,
+  filterTrigger,
+}: Props) {
   const handleFilterChange = (key: string) => {
     if (key === "aur" || key === "argint") {
       setFilterData({
@@ -98,6 +105,17 @@ export default function Filter({ filterData, setFilterData }: Props) {
               onChange={(e) => handleInputChange(e, "greutate", "max")}
               placeholder="Max Greutate"
             />
+          </div>
+          <div className="w-100">
+            <button
+              className="bg-gray-500 mt-4 rounded"
+              style={{ width: "80%" }}
+              onClick={() => {
+                setFilterTrigger(!filterTrigger);
+              }}
+            >
+              Filter data
+            </button>
           </div>
         </div>
       </div>

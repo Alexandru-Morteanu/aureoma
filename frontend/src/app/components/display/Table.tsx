@@ -7,18 +7,20 @@ type TableProps = {
   tableData: ItemData[];
   handleDetails: (index: number) => void;
   setNextReq: Function;
+  sorted: string;
+  filterTrigger: boolean;
 };
 
-const SkeletonLoading = () => (
-  <div
-    className={`flex items-center flex-col rounded-2xl bg-gray-300 bg-opacity-60 shadow-md `}
-    style={{ width: "100%", height: "100%" }}
-  />
-);
-
-function Table({ tableData, handleDetails, setNextReq }: TableProps) {
+function Table({
+  tableData,
+  handleDetails,
+  setNextReq,
+  sorted,
+  filterTrigger,
+}: TableProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [hasIntersected, setHasIntersected] = useState(false);
+  const [loaded, setLoaded] = useState(Array(tableData.length).fill(false));
   const lastItemRef: any = useRef();
   const basicItem: any = useRef();
 
@@ -26,13 +28,22 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
     getImageUrl();
   }, [tableData]);
 
+  useEffect(() => {
+    setLoaded(Array(tableData.length).fill(false));
+  }, [sorted, filterTrigger]);
+
   const handleObserver = (entities: any) => {
     const target = entities[0];
-    if (target.isIntersecting && !hasIntersected) {
+    if (
+      target.isIntersecting &&
+      !hasIntersected &&
+      loaded.reduce((count, value) => count + (value === true ? 1 : 0), 0) ===
+        tableData.length
+    ) {
       setNextReq(true);
       setTimeout(() => {
         setHasIntersected(false);
-      }, 100);
+      }, 500);
       setHasIntersected(true);
     }
   };
@@ -40,10 +51,9 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: "0px",
+      rootMargin: "400px",
       threshold: 1.0,
     });
-
     if (lastItemRef.current) {
       observer.observe(lastItemRef.current);
     }
@@ -74,6 +84,18 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
     setImageUrls(urls);
   }
 
+  useEffect(() => {
+    // if (
+    //   loaded.reduce((count, value) => count + (value === true ? 1 : 0), 0) ===
+    //   tableData.length
+    // ) {
+    //   console.log("loaded");
+    // }
+    // console.log(
+    //   loaded.reduce((count, value) => count + (value === true ? 1 : 0), 0)
+    // );
+  }, [loaded]);
+
   return (
     <div
       style={{
@@ -84,7 +106,13 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
       {tableData?.map((row, index) => {
         const isLastItem = index === tableData.length - 1;
         const itemRef = isLastItem ? lastItemRef : basicItem;
-
+        if (imageUrls[index]) {
+          if (!loaded[index]) {
+            let newLoaded = [...loaded];
+            newLoaded[index] = true;
+            setLoaded(newLoaded);
+          }
+        }
         return (
           <div key={index}>
             {imageUrls[index] ? (
@@ -148,9 +176,3 @@ function Table({ tableData, handleDetails, setNextReq }: TableProps) {
 }
 
 export default Table;
-/*
-TO DO
-  Modele 
-    Add 
-    Edit 
-*/

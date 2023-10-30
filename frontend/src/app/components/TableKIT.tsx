@@ -46,8 +46,10 @@ export default function TableKIT({ articol }: Props) {
   const [expandSortCresc, setExpandSortCresc] = useState<boolean>(false);
   const [expandSortDesc, setExpandSortDesc] = useState<boolean>(false);
   const [nextReq, setNextReq] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [filterTrigger, setFilterTrigger] = useState<boolean>(false);
   const [stopLoading, setStopLoading] = useState<boolean>(false);
+  const [numberTrigger, setNumberTrigger] = useState<boolean>(false);
+  const [go, setGO] = useState<boolean>(false);
   const [details, setDetails] = useState<number>();
   const [sortData, setSortData] = useState<string>("");
   const [pageNumber, setPageNumber] = useState(1);
@@ -63,26 +65,31 @@ export default function TableKIT({ articol }: Props) {
   });
 
   useEffect(() => {
-    console.log(nextReq, stopLoading);
-    if (pageNumber !== 1) {
-      setPageNumber(1);
-      setStopLoading(false);
-      setNextReq(true);
-      setTableData([]);
+    if (pageNumber === 1 && tableData.length > 0) {
+      setNumberTrigger(!numberTrigger);
     }
-  }, [filterData, sortData]);
+    setTimeout(() => {
+      setGO(true);
+    }, 500);
+    setTableData([]);
+    setStopLoading(false);
+    setPageNumber(1);
+  }, [sortData, filterTrigger]);
 
   useEffect(() => {
     handleRefresh(pageNumber, true);
-  }, [pageNumber]);
+  }, [pageNumber, numberTrigger]);
 
   useEffect(() => {
-    if (nextReq && !stopLoading) {
+    if (nextReq && !stopLoading && !go) {
       const newPageNumber = pageNumber + 1;
       setPageNumber(newPageNumber);
       setNextReq(false);
     }
-  }, [nextReq, stopLoading]);
+    if (go) {
+      setGO(false);
+    }
+  }, [nextReq, sortData, go, filterTrigger]);
 
   async function handleRefresh(pageNumber: number, range: boolean) {
     try {
@@ -117,12 +124,17 @@ export default function TableKIT({ articol }: Props) {
   return (
     <div className="w-100 flex justify-center mt-5">
       <div
-        className="alex"
+        className="flex"
         style={{
           width: "80%",
         }}
       >
-        <Filter filterData={filterData} setFilterData={setFilterData} />
+        <Filter
+          filterTrigger={filterTrigger}
+          setFilterTrigger={setFilterTrigger}
+          filterData={filterData}
+          setFilterData={setFilterData}
+        />
         <div className="w-100">
           <div className="flex items-center justify-between mx-8">
             <b className="text-4xl">{articol}</b>
@@ -135,6 +147,8 @@ export default function TableKIT({ articol }: Props) {
             />
           </div>
           <Table
+            filterTrigger={filterTrigger}
+            sorted={sortData}
             tableData={tableData}
             handleDetails={handleDetails}
             setNextReq={setNextReq}
